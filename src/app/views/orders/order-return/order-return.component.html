@@ -1,0 +1,67 @@
+<app-page-title title="Retour produits" subTitle="Demander un retour" />
+<div class="mt-4">
+  <h3>Détails de la commande #{{ order?.id }}</h3>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <p><strong>Date :</strong> {{ order?.date | date:'medium' }}</p>
+      <p><strong>Total :</strong> {{ order?.total | currency:'XAF' }}</p>
+      <p><strong>Status :</strong> {{ order?.status }}</p>
+    </div>
+  </div>
+
+  <h5>Produits commandés</h5>
+  <div class="table-responsive mb-4">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Produit</th>
+        <th>Prix</th>
+        <th>Quantité</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of order?.items">
+        <td>{{ item.product }}</td>
+        <td>{{ item.product_price | currency:'XAF' }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>
+          <button class="btn btn-warning btn-sm" (click)="selectItem(item)">
+            Retourner
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="selectedItem" class="card">
+    <div class="card-header bg-light">
+      <strong>Demande de retour pour {{ selectedItem.product }}</strong>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="submitReturn()" #returnForm="ngForm">
+        <div class="mb-3">
+          <label for="reason" class="form-label">Motif du retour</label>
+          <textarea
+            class="form-control"
+            id="reason"
+            required
+            [(ngModel)]="returnData.reason"
+            name="reason"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="!returnForm.form.valid">
+          Envoyer la demande
+        </button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="cancelReturn()">
+          Annuler
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+

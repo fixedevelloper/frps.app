@@ -1,0 +1,183 @@
+<app-page-title title="Products" subTitle="Products List" />
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row justify-content-between">
+          <div class="col-lg-6">
+            <div class="row align-items-center">
+              <div class="col-lg-6">
+                <form class="app-search d-none d-md-block me-auto">
+                  <div class="position-relative">
+                    <input
+                      type="search"
+                      class="form-control"
+                      placeholder="Recherche Produit"
+                      autocomplete="off"
+                      [(ngModel)]="searchText"
+                      (ngModelChange)="filterProducts()"
+                    />
+                    <iconify-icon
+                      icon="solar:magnifer-broken"
+                      class="search-widget-icon"
+                    ></iconify-icon>
+                  </div>
+                </form>
+              </div>
+              <div class="col-lg-4">
+                <h5 class="text-dark fw-medium mb-0">
+                  311 <span class="text-muted"> Produit</span>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="text-md-end mt-3 mt-md-0">
+              <div ngbDropdown class="d-inline-block me-1">
+                <button
+                  class="btn btn-outline-primary dropdown-toggle"
+                  id="dropdownCategories"
+                  ngbDropdownToggle>
+                  <i class="ri-filter-line me-1"></i>                   {{ selectedCategory || 'Filters' }}
+                </button>
+
+                <div ngbDropdownMenu aria-labelledby="dropdownCategories">
+                  <button
+                    class="dropdown-item"
+                    (click)="filterByCategory(null)">
+                    Toutes les catégories
+                  </button>
+                  <button
+                    *ngFor="let cat of categories"
+                    class="dropdown-item"
+                    (click)="filterByCategory(cat)">
+                    {{ cat }}
+                  </button>
+                </div>
+              </div>
+
+              <a [routerLink]="'/products/add'" type="button" class="btn btn-success me-1">
+                <i class="ri-add-line"></i> Ajouter Produit
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card">
+      <div
+        class="card-header d-flex justify-content-between align-items-center border-bottom"
+      >
+        <div>
+          <h4 class="card-title">All Products List</h4>
+        </div>
+        <div ngbDropdown>
+          <a ngbDropdownToggle class="btn btn-sm btn-outline-light rounded">
+            This Month
+          </a>
+          <div ngbDropdownMenu class="dropdown-menu-end">
+            <a href="javascript:void(0);" class="dropdown-item">Download</a>
+
+            <a href="javascript:void(0);" class="dropdown-item">Export</a>
+
+            <a href="javascript:void(0);" class="dropdown-item">Import</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table
+            class="table align-middle text-nowrap table-hover table-centered mb-0"
+          >
+            <thead class="bg-light-subtle">
+            <tr>
+              <th>Produit</th>
+              <th>Référence</th>
+              <th>Catégorie</th>
+              <th>Lot</th>
+              <th>Quantité/Unité</th>
+              <th>Unité</th>
+              <th>Poids</th>
+              <th>Financement</th>
+              <th>Utilisateur Cible</th>
+              <th>Date Fabrication</th>
+              <th>Date Péremption</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (item of filteredProducts; track $index) {
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <img [src]="item.image" alt="" class="avatar-sm rounded-circle" />
+                  <span>{{ item.intitule }}</span>
+          </div>
+        </td>
+        <td>{{ item.referenceProduit }}</td>
+        <td>{{ item.categorie }}</td>
+        <td>{{ item.numeroLot }}</td>
+        <td>{{ item.quantiteParUnite }}</td>
+        <td>{{ item.uniteDeMesure }}</td>
+        <td>{{ item.poidsDimension }} g</td>
+        <td>{{ item.financement }}</td>
+        <td>{{ item.utilisateurCible }}</td>
+        <td>{{ item.dateFabrication }}</td>
+        <td>{{ item.datePeremption }}</td>
+        <td>
+          <span
+            class="badge py-1 px-2 fs-13"
+            [ngClass]="
+              item.status === 'Active'
+                ? 'bg-success-subtle text-success'
+                : 'bg-danger-subtle text-danger'
+            "
+            >{{ item.status }}</span
+          >
+        </td>
+        <td>
+          <div class="d-flex gap-2">
+            <a href="#" class="btn btn-light btn-sm">
+              <iconify-icon icon="solar:eye-broken"></iconify-icon>
+            </a>
+            <a href="#" class="btn btn-soft-primary btn-sm">
+              <iconify-icon icon="solar:pen-2-broken"></iconify-icon>
+            </a>
+            <a href="#" class="btn btn-soft-danger btn-sm">
+              <iconify-icon icon="solar:trash-bin-minimalistic-2-broken"></iconify-icon>
+            </a>
+          </div>
+        </td>
+      </tr>
+            }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <nav aria-label="Page navigation example">
+          <ngb-pagination
+            [collectionSize]="30"
+            [collectionSize]="totalItems"
+            [(page)]="currentPage"
+            [pageSize]="pageSize"
+            (pageChange)="onPageChange($event)"
+            class="pagination justify-content-end mb-0"
+          >
+            <ng-template ngbPaginationPrevious>Previous</ng-template>
+            <ng-template ngbPaginationNext>Next</ng-template>
+          </ngb-pagination>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+

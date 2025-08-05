@@ -1,0 +1,66 @@
+<app-page-title title="Litiges" subTitle="Signaler un problème" />
+
+<div class="card"  *ngIf="order">
+  <div class="card-header">
+    <h4 class="card-title">Détails de la commande</h4>
+  </div>
+
+  <div class="card-body">
+    <div class="card mb-3 shadow-sm border-0">
+      <div class="card-body">
+        <h5 class="card-title mb-3">
+
+        </h5><strong>Commande #{{ order?.id }}</strong>
+
+        <ul class="list-unstyled mb-0">
+          <li><strong>Produit :</strong> <span>{{ order?.produit?.nom || '—' }}</span></li>
+          <li><strong>Statut :</strong> <span class="badge bg-info text-dark">{{ order?.status }}</span></li>
+          <li><strong>Date estimée :</strong> <span>{{ order?.date | date: 'dd/MM/yyyy' }}</span></li>
+        </ul>
+      </div>
+    </div>
+
+
+    <h5>Signaler un problème</h5>
+    <form [formGroup]="returnForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="type" class="form-label">Type de problème</label>
+        <select formControlName="type" class="form-select" required>
+          <option value="">-- Choisissez --</option>
+          <option value="retard">Retard anormal</option>
+          <option value="endommagé">Colis endommagé</option>
+          <option value="non_conformite">Produit non conforme</option>
+          <option value="produit_defectueux">Produit defectueux</option>
+          <option value="erreur_livraison">Erreur Livraison</option>
+          <option value="quantite_incorrecte">Quantite Incorrecte</option>
+        </select>
+      </div>
+      <div class="mb-3" *ngIf="returnForm.value.type === 'non_conforme'">
+        <label class="form-label">Détail de la non-conformité</label>
+        <input formControlName="nonConformDetail" type="text" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description du problème</label>
+        <textarea formControlName="description" class="form-control" rows="4" required></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="files" class="form-label">Preuves (photo, capture, etc.)</label>
+        <input type="file" (change)="onFileChange($event)" class="form-control" accept="image/*" multiple>
+        <div class="mt-2 d-flex gap-2" *ngIf="imagePreviews.length > 0">
+          <img *ngFor="let preview of imagePreviews" [src]="preview" class="img-thumbnail" style="width: 80px;">
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn btn-danger" [disabled]="!returnForm.valid">Envoyer la demande</button>
+    </form>
+
+    <div *ngIf="submitted && returnForm.valid" class="alert alert-success mt-3">
+      Problème signalé avec succès ! Le support a été notifié.
+    </div>
+  </div>
+
+</div>
+

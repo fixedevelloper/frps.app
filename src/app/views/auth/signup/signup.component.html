@@ -1,0 +1,152 @@
+<div class="row justify-content-center">
+  <div class="col-xl-5">
+    <div class="card auth-card">
+      <div class="card-body px-3 py-5">
+        <app-logo-box className="mx-auto mb-4 text-center auth-logo"/>
+
+        <h2 class="fw-bold text-uppercase text-center fs-18">Créer un compte</h2>
+        <p class="text-muted text-center mt-1 mb-4">
+          Rejoignez notre plateforme et profitez d’une expérience de commande simple, rapide et sécurisée.
+          Suivez vos livraisons, faites des retours, et restez informé à chaque étape.
+        </p>
+
+        <div class="px-4">
+          <form
+            [formGroup]="signinForm"
+            (ngSubmit)="onRegister()"
+            class="authentication-form"
+          >
+            <div class="row">
+              <div class="mb-3 col-md-12">
+                <label class="form-label" for="example-name">Nom complet</label>
+                <input
+                  type="name"
+                  formControlName="name"
+                  id="example-name"
+                  name="example-name"
+                  class="form-control bg-light bg-opacity-50 border-light py-2"
+                  placeholder=''
+                />
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <label class="form-label">Departement</label>
+                <select
+                  [choices]="departements"
+                  selectFormInputDynamic
+                  (change)="loadcity()"
+                  class="form-select"
+                  formControlName="departement_id"
+                  [ngClass]="{'is-invalid': signinForm.get('departement_id')?.touched && signinForm.get('departement_id')?.invalid}">
+                  <option [ngValue]="null">-- Choisir un departement --</option>
+                </select>
+<!--                <select id="departement_id" class="form-select" formControlName="departement_id"
+                        (change)="loadcity()"
+                        [ngClass]="{'is-invalid': signinForm.get('departement_id')?.touched && signinForm.get('departement_id')?.invalid}">
+                  <option [ngValue]="null">&#45;&#45; Choisir &#45;&#45;</option>
+                  <option *ngFor="let c of departements" [ngValue]="c.id">
+                    {{ c.name }}
+                  </option>
+
+                </select>-->
+                <div class="invalid-feedback">Champ requis</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Villes</label>
+                <select
+                  [choices]="cities"
+                  selectFormInputDynamic
+                  class="form-select"
+                  formControlName="city_id"
+                  [ngClass]="{'is-invalid': signinForm.get('city_id')?.touched && signinForm.get('city_id')?.invalid}">
+                  <option [ngValue]="null">-- Choisir une ville --</option>
+                </select>
+                <div class="invalid-feedback">Champ requis</div>
+              </div>
+            </div>
+
+
+            <div class="row mt-3">
+              <div class="mb-3 col-md-6">
+                <label class="form-label" for="example-name">Numéro de téléphone</label>
+                <input
+                  formControlName="phone"
+                  type="name"
+                  id="example-phone"
+                  name="example-name"
+                  class="form-control bg-light bg-opacity-50 border-light py-2"
+                  placeholder=""
+                />
+              </div>
+              <div class="mb-3 col-md-6">
+                <label class="form-label" for="example-email">Adresse email</label>
+                <input
+                  formControlName="email"
+                  type="email"
+                  id="example-email"
+                  name="example-email"
+                  class="form-control bg-light bg-opacity-50 border-light py-2"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="row">
+
+              <div class="mb-3 col-md-6">
+                <label class="form-label" for="example-password">Mot de passe</label>
+                <input
+                  formControlName="password"
+                  type="password"
+                  id="example-password"
+                  class="form-control bg-light bg-opacity-50 border-light py-2"
+                  placeholder=""
+                />
+              </div>
+              <div class="mb-3 col-md-6">
+                <label class="form-label" for="example-name">Confirmer le mot de passe</label>
+                <input
+                  formControlName="password_confirmation"
+                  type="password"
+                  id="example-conrfim"
+                  name="example-name"
+                  class="form-control bg-light bg-opacity-50 border-light py-2"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="checkbox-signin"
+                />
+                <label class="form-check-label" for="checkbox-signin"
+                >En vous inscrivant, vous acceptez nos Conditions d’utilisation et notre Politique de
+                  confidentialité</label
+                >
+              </div>
+            </div>
+
+            <div class="mb-1 text-center d-grid">
+              <button class="btn btn-danger py-2" type="submit">
+                Créer mon compte
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+    <p class="mb-0 text-center text-white">
+      Vous avez déjà un compte ?
+      <a
+        routerLink="/auth/sign-in"
+        class="text-reset text-unline-dashed fw-bold ms-1"
+      >Se connecter</a
+      >
+    </p>
+  </div>
+</div>

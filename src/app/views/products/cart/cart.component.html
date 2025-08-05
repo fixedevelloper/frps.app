@@ -1,0 +1,242 @@
+<app-page-title title="Panier" subTitle="Votre Panier" />
+<ng-container *ngIf="cartItems$ | async as items">
+  <div *ngIf="items.length; else emptyCart">
+<div class="row gy-4">
+  <div class="col-xl-9 col-lg-8">
+    <div class="cart-table border border-gray-100 rounded-8 px-40 py-48">
+      <div class="overflow-x-auto scroll-sm scroll-sm-horizontal">
+        <table class="table style-three">
+          <thead class="">
+          <tr>
+            <th class="h6 mb-0 text-lg fw-bold">Delete</th>
+            <th class="h6 mb-0 text-lg fw-bold">Product Name</th>
+            <th class="h6 mb-0 text-lg fw-bold">Price</th>
+            <th class="h6 mb-0 text-lg fw-bold">Quantity</th>
+            <th class="h6 mb-0 text-lg fw-bold">Subtotal</th>
+          </tr>
+          </thead>
+          <hr>
+          <tbody>
+          <tr *ngFor="let item of cartItems$ | async">
+            <td>
+              <button (click)="removeItem(item.productId)" type="button" class="btn-danger btn btn-sm flex-align gap-12 hover-text-danger-600">
+                <i class="ri ri-delete-bin-line"></i> Remove
+              </button>
+            </td>
+            <td>
+              <div class="table-product d-flex align-items-center gap-24">
+                <div class="table-product__thumb border rounded-8">
+                  <img [src]="item.image" alt="" />
+                </div>
+                <div class="table-product__content text-start">
+                  <h6 class="title text-lg fw-semibold mb-8">{{ item.name }}</h6>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="fw-semibold">{{ item.price | number: '1.2-2' }} {{ currency }}</span>
+            </td>
+            <td>
+              <div class="d-flex rounded-4 overflow-hidden">
+                <button class="quantity__minus border border-end border-gray-100 flex-shrink-0 h-48 w-48 text-neutral-600 flex-center hover-bg-main-600 hover-text-white"
+                        type="button" (click)="decreaseQty(item)">
+                  <i class="ri ri-subtract-line"></i>
+                </button>
+                <input type="number"
+                       class="quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32"
+                       [value]="item.quantity"
+                       (change)="onInputChange($event, item.productId)"
+                       min="1" />
+                <button class="quantity__plus border border-end border-gray-100 flex-shrink-0 h-48 w-48 text-neutral-600 flex-center hover-bg-main-600 hover-text-white" type="button" (click)="increaseQty(item)">
+                  <i class="ri ri-add-line"></i></button>
+              </div>
+            </td>
+            <td>
+              <span class="text-lg h6 mb-0 fw-semibold">{{ item.price * item.quantity | currency:'XAF':'symbol-narrow' }}</span>
+            </td>
+          </tr>
+          </tbody>
+
+        </table>
+      </div>
+
+      <div class="flex-between flex-wrap gap-16 mt-16">
+        <div class="flex-align gap-16">
+          <input type="text" class="common-input" placeholder="Coupon Code">
+          <button type="submit" class="btn btn-main py-18 w-100 rounded-8">Apply Coupon</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-4">
+    <div class="cart-sidebar border border-gray-100 rounded-8 px-24 py-40">
+      <ng-container *ngIf="cartItems$ | async as items">
+        <h6 class="text-xl mb-32">Cart Totals</h6>
+        <div class="bg-color-three rounded-8 p-24">
+        <div class="mb-32 flex-between">
+          <span class="text-gray-900 font-heading-two">Subtotal</span>
+          <span class="text-gray-900 fw-semibold">{{ getTotal() | number: '1.2-2' }} {{ currency }}</span>
+        </div>
+
+        <div class="mb-32 flex-between">
+          <span class="text-gray-900 font-heading-two">Estimated Delivery</span>
+          <span class="text-gray-900 fw-semibold">Free</span>
+        </div>
+
+        <div class="mb-0 flex-between">
+          <span class="text-gray-900 font-heading-two">Estimated Taxes</span>
+          <span class="text-gray-900 fw-semibold">{{ 0 | number: '1.2-2' }} {{ currency }}</span>
+        </div>
+        </div>
+        <div class="bg-color-three rounded-8 p-24 mt-24">
+          <div class="flex-between gap-8">
+            <span class="text-gray-900 text-xl fw-semibold">Total</span>
+            <span class="text-gray-900 text-xl fw-semibold">{{ getTotal() | number: '1.2-2' }} {{ currency }}</span>
+          </div>
+        </div>
+      </ng-container>
+
+      <a routerLink="/products/checkout" class="btn btn-main mt-40 py-18 w-100 rounded-8">Proceed to checkout</a>
+    </div>
+
+  </div>
+</div>
+  </div>
+    <ng-template #emptyCart>
+      <p>Votre panier est vide.</p>
+    </ng-template>
+</ng-container>
+
+<!--<div class="row">
+
+  <div class="card overflow-hidden">
+    <div class="card-body">
+  <ng-container *ngIf="cartItems$ | async as items">
+    <div *ngIf="items.length; else emptyCart">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Image</th><th>Produit</th><th>Prix</th><th>Quantité</th><th>Total</th><th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of items">
+          <td><img [src]="item.image" width="60" /></td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.price | number:'1.0-0' }} FCFA</td>
+          <td>
+            <input
+              type="number"
+              class="form-control"
+              [value]="item.quantity"
+              (change)="onInputChange($event, item.productId)"
+              min="1"
+            />
+          </td>
+          <td>{{ (item.price * item.quantity) | number:'1.0-0' }} FCFA</td>
+          <td><button class="btn btn-danger btn-sm" (click)="removeItem(item.productId)">Supprimer</button></td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="text-end mt-3">
+        <h4>Total : {{ getTotal() | number:'1.0-0' }} FCFA</h4>
+        <button class="btn btn-warning" (click)="clearCart()">Vider le panier</button>
+      </div>
+      <a class="btn btn-success" routerLink="/products/checkout">checkout</a>
+    </div>
+
+    <ng-template #emptyCart>
+      <p>Votre panier est vide.</p>
+    </ng-template>
+  </ng-container>
+    </div>
+</div>
+</div>-->
+
+
+<!--<div class="card overflow-hidden">
+  <div class="card-body">
+  <div class="row">
+    <div class="col-lg-8 mb-40">
+      <div class="d-flex justify-content-between">
+        <h6 class="text-body">There are <span class="text-brand">{{ (cartItems$ | async)?.length }}</span> products in your cart</h6>
+        <h6 class="text-body"><a (click)="clearCart()" class="text-muted" role="button"><i class="fi-rs-trash mr-5"></i>Clear Cart</a></h6>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="cartItems$ | async as items">
+    <div *ngIf="items.length; else emptyCart">
+  <div class="row">
+    &lt;!&ndash; Cart Table &ndash;&gt;
+    <div class="col-lg-8">
+      <div class="table-responsive shopping-summery">
+        <table class="table table-wishlist">
+          <thead>
+          <tr class="main-heading">
+            <th></th>
+            <th colspan="2">Product</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+            <th>Remove</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of items">
+            <td><input type="checkbox" /></td>
+            <td><img [src]="item.image" alt="#" width="40" /></td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.price | currency }}</td>
+            <td>
+              <div class="d-flex rounded-4 overflow-hidden">
+                <button type="button" class="quantity__minus border border-end border-gray-100 flex-shrink-0 h-48 w-48 text-neutral-600 flex-center hover-bg-main-600 hover-text-white">
+                  <i class="ph ph-minus"></i>
+                </button>
+                <input type="number" class="quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-4" value="1" min="1">
+                <button type="button" class="quantity__plus border border-end border-gray-100 flex-shrink-0 h-48 w-48 text-neutral-600 flex-center hover-bg-main-600 hover-text-white">
+                  <i class="ph ph-plus"></i>
+                </button>
+              </div>
+              <div class="detail-qty border radius">
+                <a role="button" (click)="decreaseQty(item)"><i class="fi-rs-angle-small-down"></i></a>
+                <input type="text" [value]="item.quantity" readonly />
+                <a role="button" (click)="increaseQty(item)"><i class="fi-rs-angle-small-up"></i></a>
+              </div>
+            </td>
+            <td>{{ item.price * item.quantity | currency }}</td>
+            <td><a (click)="removeItem(item.productId)" class="text-body"><i class="fi-rs-trash"></i></a></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    &lt;!&ndash; Summary &ndash;&gt;
+    <div class="col-lg-4">
+      <div class="border p-md-4 cart-totals ml-30">
+        <table class="table no-border">
+          <tr>
+            <td><h6 class="text-muted">Subtotal</h6></td>
+            <td><h4 class="text-brand text-end">{{ getTotal() | currency }}</h4></td>
+          </tr>
+          <tr>
+            <td><h6 class="text-muted">Shipping</h6></td>
+            <td><h5 class="text-heading text-end">{{ getTotal() | currency }}</h5></td>
+          </tr>
+          <tr>
+            <td><h6 class="text-muted">Total</h6></td>
+            <td><h4 class="text-brand text-end">{{ getTotal() | currency }}</h4></td>
+          </tr>
+        </table>
+        <a routerLink="/checkout" class="btn mb-20 w-100">Proceed To Checkout <i class="fi-rs-sign-out ml-15"></i></a>
+      </div>
+    </div>
+  </div>
+    </div>
+    <ng-template #emptyCart>
+      <p>Votre panier est vide.</p>
+    </ng-template>
+  </ng-container>
+</div>
+  </div>-->

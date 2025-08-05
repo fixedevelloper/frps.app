@@ -1,0 +1,264 @@
+<div class="card">
+  <div class="card-header border-bottom">
+    <div>
+      <h4 class="card-title">Produits</h4>
+      <p class="mb-0">Afichage 15,780 Produits</p>
+    </div>
+  </div>
+  <div class="card-body border-light">
+    <form>
+      <label for="choices-single-groups" class="form-label"
+        >Categories</label
+      >
+      <select
+        [choices]="categories"
+        selectFormInputDynamic
+        (change)="findProducts()"
+        class="form-select">
+        <option [ngValue]="null">-- Choisir une categorie --</option>
+      </select>
+<!--      <select
+        selectFormInput
+        class="form-control"
+        id="choices-single-groups"
+        data-choices
+        data-choices-groups
+        data-placeholder="Choisir une categorie"
+        name="choices-single-groups"
+      >
+        <option value="">Choisir une categorie</option>
+        <option *ngFor="let c of categories" [ngValue]="c.id">
+          {{ c.intitule }}
+        </option>
+      </select>-->
+
+      <div class="mb-3">
+        <label for="typeplace" class="form-label">Recherche</label>
+        <input type="text" id="typeplace" class="form-control" />
+      </div>
+    </form>
+    <h5 class="text-dark fw-medium my-3">Gamme de prix personnalisée :</h5>
+    <div id="product-price-range" data-slider-size="md" class="">
+      <nouislider
+        [config]="rangeConfig"
+        [(ngModel)]="someRange"
+        class="mt-0"
+      ></nouislider>
+    </div>
+    <div class="formCost d-flex gap-2 align-items-center mt-3">
+      <input
+        class="form-control form-control-sm text-center"
+        type="text"
+        id="minCost"
+        [value]="'$' + someRange[0]"
+      />
+      <span class="fw-semibold text-muted">to</span>
+      <input
+        class="form-control form-control-sm text-center"
+        type="text"
+        id="maxCost"
+        [value]="'$' + someRange[1]"
+      />
+    </div>
+<!--    <h5 class="text-dark fw-medium my-3">Accessibility Features :</h5>
+    <div class="row g-1">
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck11"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck11">
+            For Rent
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck12"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck12">
+            For Sale
+          </label>
+        </div>
+      </div>
+    </div>
+    <h5 class="text-dark fw-medium my-3">Properties Type :</h5>
+    <div class="row g-1">
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck"
+            checked
+          />
+          <label class="form-check-label ms-1" for="defaultCheck">
+            All Properties
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck1"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Cottage
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck2"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Villas
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck3"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Apartment
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck4"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Duplex Bungalow
+          </label>
+        </div>
+      </div>
+    </div>
+    <h5 class="text-dark fw-medium my-3">Bedrooms :</h5>
+    <div
+      class="d-flex flex-wrap gap-1"
+      role="group"
+      aria-label="Basic checkbox toggle button group"
+    >
+      <input type="checkbox" class="btn-check" id="btncheck1" />
+      <label class="btn btn-outline-primary" for="btncheck1">1 BHK</label>
+
+      <input type="checkbox" class="btn-check" id="btncheck2" />
+      <label class="btn btn-outline-primary" for="btncheck2">2 BHK</label>
+
+      <input type="checkbox" class="btn-check" id="btncheck3" checked />
+      <label class="btn btn-outline-primary" for="btncheck3">3 BHK</label>
+
+      <input type="checkbox" class="btn-check" id="btncheck4" />
+      <label class="btn btn-outline-primary my-1" for="btncheck4"
+        >4 & 5 BHK</label
+      >
+    </div>
+    <h5 class="text-dark fw-medium my-3">Accessibility Features :</h5>
+    <div class="row g-1">
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck5"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Balcony
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck6"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Parking
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck7"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1"> Spa </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck8"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Pool
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck9"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Restaurant
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck10"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Fitness Club
+          </label>
+        </div>
+      </div>
+    </div>-->
+  </div>
+  <div class="card-footer">
+    <a href="javascript:void(0);" class="btn btn-primary w-100">Apply</a>
+  </div>
+</div>

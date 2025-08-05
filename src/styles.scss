@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+@import "nouislider/dist/nouislider.css";
+
+@import "ngx-toastr/toastr"; // OK
+@import "flatpickr/dist/flatpickr.css"; // OK
+@import "quill/dist/quill.snow.css"; // OK
+@import "quill/dist/quill.bubble.css"; // OK
+@import "simplebar-core/dist/simplebar.css"; // ❗️ CORRIGÉ
+
+@import "../public/assets/scss/app.scss";
+@import "../public/assets/scss/icons.scss";
+@import "../public/assets/scss/main.css";

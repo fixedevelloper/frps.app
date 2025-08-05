@@ -1,0 +1,151 @@
+<app-page-title title="Commades" subTitle="Mes Commades" />
+
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card">
+      <div
+        class="card-header d-flex justify-content-between align-items-center border-bottom"
+      >
+        <div>
+          <h4 class="card-title">Mes Commandes</h4>
+        </div>
+        <div ngbDropdown>
+          <a
+            ngbDropdownToggle
+            class="btn btn-sm btn-outline-light rounded"
+            role="button"
+          >
+            This Month
+          </a>
+          <div ngbDropdownMenu class="dropdown-menu-end">
+            <a href="javascript:void(0);" class="dropdown-item">Download</a>
+
+            <a href="javascript:void(0);" class="dropdown-item">Export</a>
+
+            <a href="javascript:void(0);" class="dropdown-item">Import</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table
+            class="table align-middle text-nowrap table-hover table-centered mb-0"
+          >
+            <thead class="bg-light-subtle">
+              <tr>
+                <th style="width: 20px">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="customCheck1"
+                    />
+                    <label class="form-check-label" for="customCheck1"></label>
+                  </div>
+                </th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of filteredOrderModels; let i = index">
+              <td>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="customCheck{{i}}"
+                  />
+                  <label class="form-check-label" for="customCheck{{i}}">
+                  </label>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div>
+                    <img
+                      [src]="item.customer_image"
+                      alt=""
+                      class="avatar-sm rounded-circle"
+                    />
+                  </div>
+                  <div>
+                    <a
+                      href="javascript:void(0);"
+                      class="text-dark fw-medium fs-15"
+                    >{{ item.customer_name }}</a
+                    >
+                  </div>
+                </div>
+              </td>
+              <td>{{ item.date | date}}</td>
+              <td>{{ item.total | xafCurrency }}</td>
+              <td>
+      <span
+        class="badge text-white fs-11"
+        [ngClass]="getStatusClass(item.status)"
+      >{{ item.status }}</span
+      >
+              </td>
+              <td>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                  <div class="dropdown" ngbDropdown>
+                    <button
+                      type="button"
+                      ngbDropdownToggle
+                      class="btn btn-primary dropdown-toggle"
+                    >
+                    </button>
+                    <ul class="dropdown-menu" ngbDropdownMenu>
+                      <li>
+                        <a (click)="onView(item)" class="dropdown-item" href="javascript:void(0);">Detail</a>
+                      </li>
+                      <li *ngIf="item.status !='En attente'">
+                        <hr class="dropdown-divider" />
+                      </li>
+                      <li *ngIf="item.status !='En attente'">
+                        <a  [routerLink]="['/orders/delivery', item.id]"  class="dropdown-item" href="javascript:void(0);"
+                        >Livraison</a>
+                      </li>
+                      <li>
+                        <hr class="dropdown-divider" />
+                      </li>
+                      <li *ngIf="item.status =='Livré'">
+                        <a [routerLink]="['/orders/return', item.id]" class="dropdown-item" href="javascript:void(0);">
+                          Demander un retour
+                        </a>
+                      </li>
+
+
+                    </ul>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card-footer border-top">
+        <nav aria-label="Page navigation example">
+          <ngb-pagination
+            [collectionSize]="30"
+            [collectionSize]="totalItems"
+            [(page)]="currentPage"
+            [pageSize]="pageSize"
+            (pageChange)="onPageChange($event)"
+            class="pagination justify-content-end mb-0"
+          >
+            <ng-template ngbPaginationPrevious>Previous</ng-template>
+            <ng-template ngbPaginationNext>Next</ng-template>
+          </ngb-pagination>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

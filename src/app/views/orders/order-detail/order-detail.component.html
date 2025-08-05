@@ -1,0 +1,169 @@
+<app-page-title title="Commades" subTitle="Détail de la commande #{{ order?.id }}"/>
+<!--<div class="row">
+  <div class="col-xl-8">
+
+  <div class="card p-4 mb-4">
+    <div class="card-header">
+      <h2 class="font-semibold text-lg mb-2">📦 Produits</h2>
+    </div>
+    <div class="card-body">
+
+
+    <div *ngFor="let item of order?.items" class="border-b py-2">
+      <div class="flex justify-between">
+        <span>{{ item.product }} (x{{ item.quantity }})</span>
+        <span>{{ item.product_price * item.quantity | xafCurrency }}</span>
+      </div>
+    </div>
+    <div class="flex justify-between font-semibold mt-4">
+      <span>Total</span>
+      <span>{{ order?.total | xafCurrency }}</span>
+    </div>
+  </div>
+  </div>
+  </div>
+  <div class="col-xl-4">
+
+  <div class="card rounded p-4">
+    <div class="card-header">
+    <h2 class="font-semibold text-lg mb-2">📍 Livraison</h2>
+    </div>
+    <div class="card-body">
+
+    <p><strong>Adresse :</strong> {{ order?.deliveryAddress }}</p>
+    <p><strong>Statut :</strong>
+      <span [ngClass]="{
+        'text-green-600': order?.status === 'Livrée',
+        'text-orange-600': order?.status === 'En cours',
+        'text-red-600': order?.status === 'Annulée'
+      }">{{ order?.status }}</span>
+    </p>
+  </div>
+  </div>
+  </div>
+</div>-->
+<!-- COMMANDE -->
+<div class="card" *ngIf="order">
+  <header class="card-header">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <i class="material-icons md-calendar_today"></i>
+        <b>{{ order.date | date: 'full' }}</b><br>
+        <small class="text-muted">Commande #{{ order.id }}</small>
+      </div>
+    </div>
+  </header>
+
+  <div class="card-body">
+    <!-- Produits -->
+    <div class="table-responsive mt-3">
+      <table class="table table-borderless text-nowrap mb-0">
+        <thead class="bg-light bg-opacity-50">
+        <tr>
+          <th>Produit</th>
+          <th>Prix Unitaire</th>
+          <th>Quantité</th>
+          <th class="text-end">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of order.items">
+          <td>{{ item.product }}</td>
+          <td>{{ item.product_price | number: '1.2-2' }} {{ currency }}</td>
+          <td>{{ item.quantity }}</td>
+          <td class="text-end">{{ getTotalPrice(item) | number: '1.2-2' }} {{ currency }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Infos supplémentaires -->
+    <div class="row mt-3">
+      <div class="col-md-7">
+        <p><strong>Statut :</strong> <span class="text-muted">{{ order.status }}</span></p>
+        <h6 class="text-muted">Notes:</h6>
+        <small class="text-muted">Aucune note</small>
+      </div>
+      <div class="col-md-5 text-end">
+        <p><strong>Sous-total :</strong> {{ order.total | number: '1.2-2' }} {{ currency }}</p>
+        <p><strong>Remise (10%) :</strong> {{ 0 | number: '1.2-2' }} {{ currency }}</p>
+        <h3>Total : {{ order.total | number: '1.2-2' }} {{ currency }}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFORMA -->
+<ng-container *ngIf="order && order.status !== 'En attente'">
+  <div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h4 class="card-title">Proforma</h4>
+    </div>
+    <div class="card-body" *ngIf="order.proforma_pdf">
+      <iframe [src]="order.proforma_pdf | safeUrl" width="100%" height="600px"></iframe>
+    </div>
+  </div>
+</ng-container>
+
+<!-- PAIEMENTS -->
+<ng-container *ngIf="order && order.status !== 'En attente'">
+  <div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h4 class="card-title">Paiements</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="paymentForm" (ngSubmit)="onPayd()">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-5">
+            <label class="form-label">Méthode de paiement</label>
+            <select class="form-select"
+                    formControlName="methodPayment"
+                    [ngClass]="{'is-invalid': paymentForm.get('methodPayment')?.touched && paymentForm.get('methodPayment')?.invalid}">
+              <option value="2">MTN Mobile Money</option>
+              <option value="3">Orange Mobile Money</option>
+              <option value="4">Carte bancaire</option>
+            </select>
+            <div class="invalid-feedback">Champ requis</div>
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">Montant</label>
+            <input type="text"
+                   class="form-control bg-light bg-opacity-50 border-light py-2"
+                   formControlName="amount" placeholder="Montant" />
+          </div>
+          <div class="col-md-2 text-end">
+            <button class="btn btn-danger w-100" type="submit">Payer</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Historique des paiements -->
+      <div class="table-responsive mt-4" *ngIf="order.payments?.length">
+        <table class="table table-bordered">
+          <thead class="bg-light">
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Montant</th>
+            <th>Méthode</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let payment of order.payments; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ payment.date | date:'short' }}</td>
+            <td>{{ payment.amount | number: '1.2-2' }} {{ currency }}</td>
+            <td>{{ payment.method }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<div *ngIf="!order" class="text-center my-5">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p>Chargement de la commande...</p>
+</div>
+
+

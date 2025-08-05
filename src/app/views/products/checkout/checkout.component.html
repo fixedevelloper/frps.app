@@ -1,0 +1,59 @@
+<app-page-title title="Products" subTitle="Checkout"/>
+
+<div class="row">
+<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+  <div class="checkout-container" *ngIf="items.length > 0">
+    <div class="row flex-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="border border-gray-100 rounded-8 px-24 py-40 mt-24">
+              <div class="mb-32 pb-32 border-bottom border-gray-100 flex-between gap-8">
+                <span class="text-gray-900 fw-medium text-xl font-heading-two">Product</span>
+                <span class="text-gray-900 fw-medium text-xl font-heading-two">Subtotal</span>
+              </div>
+
+              <div *ngFor="let item of items" class="flex-between gap-24 mb-32">
+                <div class="flex-align gap-12">
+                  <span class="text-gray-900 fw-normal text-md font-heading-two w-144">{{ item.name }}</span>
+                  <span class="text-gray-900 fw-normal text-md font-heading-two"><i class="ph-bold ph-x"></i></span>
+                  <span class="text-gray-900 fw-semibold text-md font-heading-two">{{ item.quantity }}</span>
+                </div>
+                <span class="text-gray-900 fw-bold text-md font-heading-two">{{ item.price | number: '1.2-2' }} {{ currency }}</span>
+              </div>
+
+
+
+              <div class="border-top border-gray-100 pt-30  mt-30">
+                <div class="mb-32 flex-between gap-8">
+                  <span class="text-gray-900 font-heading-two text-xl fw-semibold">Subtotal</span>
+                  <span class="text-gray-900 font-heading-two text-md fw-bold">{{ total | number: '1.2-2' }} {{ currency }}</span>
+                </div>
+                <div class="mb-0 flex-between gap-8">
+                  <span class="text-gray-900 font-heading-two text-xl fw-semibold">Total</span>
+                  <span class="text-gray-900 font-heading-two text-md fw-bold">{{ total | number: '1.2-2' }} {{ currency }}</span>
+                </div>
+              </div>
+            </div>
+  <!--          <div class="form-section mt-3">
+              <div *ngFor="let item of items" class="cart-item d-flex align-items-center mb-2">
+                <img [src]="item.image" width="50" class="me-2" />
+                <div>
+                  {{ item.name }}<br />
+                  {{ item.quantity }} × {{ item.price | number: '1.2-2' }} {{ currency }}
+                </div>
+              </div>
+              <p class="total mt-2">Total : <strong>{{ total | number: '1.2-2' }} {{ currency }}</strong></p>
+            </div>-->
+            <button type="submit" class="btn btn-main mt-40 py-18 w-100 rounded-8 mt-56" [disabled]="checkoutForm.invalid">Soumestre la commande</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template *ngIf="items.length == 0">
+    <p>🛒 Votre panier est vide.</p>
+  </ng-template>
+</form>
+</div>

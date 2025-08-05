@@ -1,0 +1,24 @@
+.btn-main {
+  background-color: hsl(var(--main)) !important;
+  border-color: hsl(var(--main)) !important;
+}
+
+.btn-main:hover {
+  background-color: var(--main-800) !important;
+  border-color: var(--main-800) !important;
+}
+.btn {
+  position: relative;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  font-weight: 500;
+  font-family: var(--body-font);
+  color: hsl(var(--white)) !important;
+  z-index: 1;
+  line-height: 1;
+  padding: 13px 24px;
+}
